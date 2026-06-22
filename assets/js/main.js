@@ -41,6 +41,7 @@ function renderTable() {
 
   document.getElementById("product-count").textContent =
     products.length + (products.length === 1 ? " item" : " items");
+  document.getElementById("inv-badge").textContent = products.length;
 
   const totalUnits = products.reduce((s, p) => s + p.stock, 0);
   const totalValue = products.reduce((s, p) => s + p.stock * p.price, 0);
