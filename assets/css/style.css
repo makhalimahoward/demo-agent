@@ -65,6 +65,7 @@ body {
     overflow: hidden;
     transition: background 0.25s, color 0.25s;
     -webkit-font-smoothing: antialiased;
+    padding-bottom: 2rem;
 }
 
 /* ── LAYOUT ── */
