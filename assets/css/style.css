@@ -93,19 +93,44 @@ body {
     flex-shrink: 0;
 }
 
-.sidebar-toggle {
-    display: none;
-    width: 32px;
-    height: 32px;
+.inventory-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: transparent;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+    white-space: nowrap;
+}
+
+.inventory-toggle:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-tint);
+}
+
+.inventory-toggle i {
+    font-size: 14px;
+}
+
+.inv-badge {
+    background: var(--accent);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    min-width: 16px;
+    height: 16px;
+    border-radius: 20px;
+    display: flex;
     align-items: center;
     justify-content: center;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    color: var(--text-muted);
-    font-size: 15px;
-    cursor: pointer;
-    flex-shrink: 0;
+    padding: 0 4px;
 }
 
 .logo {
@@ -692,16 +717,21 @@ tbody td:first-child {
 }
 
 @media (max-width: 860px) {
-    .sidebar-toggle {
-        display: flex;
+    .topnav {
+        flex-wrap: wrap;
+        row-gap: 10px;
     }
 
-    .sheet-link span {
-        display: none;
+    .nav-right {
+        order: 3;
+        width: 100%;
+        margin-left: 0;
+        justify-content: flex-start;
+        flex-wrap: wrap;
     }
 
-    .sheet-link {
-        padding: 6px 8px;
+    .status-dot {
+        margin-left: auto;
     }
 
     .sidebar {
