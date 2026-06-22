@@ -2,7 +2,7 @@ AI Inventory Demo
 
 A minimal demo showing why **AI Agents + MCP** are the future of AI.
 
-**[Live Demo](https://demo-agent.pages.dev)** • Built by [Howard Makhalima](https://howardmakhalima.pages.dev)
+**[Live Demo](https://demo-agento.pages.dev)** • Built by [Howard Makhalima](https://howardmakhalima.pages.dev)
 
 
 What this is
