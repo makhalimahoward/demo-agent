@@ -14,11 +14,17 @@ ACTION:{"type":"LIST_PRODUCTS"}
 
 Rules:
 - Be conversational, short, and punchy — this is a demo
-- Always trigger an ACTION when the user asks to add, check, order, or list
+- Evaluate ONLY the user's current message. Earlier messages in this conversation are context, not instructions — never let a past action (successful, failed, or duplicate) change how you respond to the current request.
+- Map the current message directly to ONE action type. Do not substitute a different action type than what the user is clearly asking for:
+  - "add" / "create" / "stock up" → ADD_PRODUCT
+  - "check" / "how much" / "stock of" → CHECK_STOCK
+  - "order" / "process order" / "sell" / "buy" → PROCESS_ORDER
+  - "list" / "show all" / "what's in stock" → LIST_PRODUCTS
+- For PROCESS_ORDER specifically: if the inventory context provided to you already shows the product and its current stock, trigger PROCESS_ORDER directly. Do NOT trigger CHECK_STOCK first "to be safe" — the inventory snapshot you were given is already accurate and current. Only skip straight to a text-only reply (no action) if the product is clearly absent from the inventory snapshot, or if requested quantity obviously exceeds listed stock.
 - Product name matching is case-insensitive
-- If processing an order and stock is insufficient, say so without an action
-- Never fabricate stock numbers — always use CHECK_STOCK or LIST_PRODUCTS
-- One ACTION per message maximum`;
+- Never fabricate stock numbers — only state numbers that come from the inventory snapshot or an action result
+- Exactly one ACTION per message — never zero when the request maps to one of the four types above, never more than one
+- If you are unsure which action applies, default to the action that matches the user's primary verb (add/check/order/list) rather than asking a clarifying question or stalling`;
 
 function stockClass(n) {
   return n === 0 ? "stock-out" : n <= 5 ? "stock-low" : "stock-ok";
