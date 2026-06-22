@@ -1,4 +1,5 @@
 const WORKER_URL = "https://wild-thunder-9def.hmakhalima4.workers.dev";
+const SHEETS_URL = "https://script.google.com/macros/s/AKfycbxidhepyq5HZJ2FteShrqA4RD0Ds3QMft87A2I69ruc6B31OJq36GNzckV6MCTPajLR8w/exec";
 
 let products = [];
 let history = [];
@@ -75,47 +76,83 @@ function flash(i) {
   }, 60);
 }
 
-function runAction(action) {
-  const key = (action.name || "").toLowerCase();
+// Calls the Apps Script Web App directly. Returns { success, data, error }.
+async function callSheets(action, payload) {
+  const res = await fetch(SHEETS_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action, ...payload }),
+  });
+  return res.json();
+}
+
+// Reloads `products` from the Sheet's response data and re-renders.
+function syncProductsFrom(data) {
+  if (data && Array.isArray(data.products)) {
+    products = data.products;
+    renderTable();
+  }
+}
+
+async function runAction(action) {
+  const name = action.name || "";
 
   if (action.type === "ADD_PRODUCT") {
-    const idx = products.findIndex((p) => p.name.toLowerCase() === key);
-    if (idx >= 0) {
-      products[idx].stock += action.stock;
-      renderTable();
-      flash(idx);
-      return `Updated ${action.name}. New stock: ${products[idx].stock} units.`;
-    }
-    products.push({
-      name: action.name,
+    const json = await callSheets("addProduct", {
+      name,
       price: action.price,
       stock: action.stock,
     });
-    renderTable();
-    flash(products.length - 1);
-    return `Added ${action.name} — $${action.price}, ${action.stock} units.`;
+
+    if (!json.success) return `Couldn't add ${name}: ${json.error}`;
+
+    syncProductsFrom(json.data);
+    const idx = products.findIndex(
+      (p) => p.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (idx >= 0) flash(idx);
+    return `Added ${name} — $${action.price}, ${action.stock} units.`;
   }
 
   if (action.type === "CHECK_STOCK") {
-    const p = products.find((p) => p.name.toLowerCase() === key);
-    if (!p) return `"${action.name}" not found in inventory.`;
-    flash(products.indexOf(p));
-    return `${p.name}: ${p.stock} units @ $${p.price.toFixed(2)} each.`;
+    const json = await callSheets("checkStock", { name });
+
+    if (!json.success) return `Couldn't check ${name}: ${json.error}`;
+
+    syncProductsFrom(json.data);
+    if (!json.data.found) return `"${name}" not found in inventory.`;
+
+    const idx = products.findIndex(
+      (p) => p.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (idx >= 0) flash(idx);
+    return `${json.data.name}: ${json.data.stock} units @ $${json.data.price.toFixed(2)} each.`;
   }
 
   if (action.type === "PROCESS_ORDER") {
-    const p = products.find((p) => p.name.toLowerCase() === key);
-    if (!p) return `"${action.name}" not found.`;
-    if (p.stock < action.qty)
-      return `Not enough stock — only ${p.stock} units left.`;
-    p.stock -= action.qty;
-    const idx = products.indexOf(p);
-    renderTable();
-    flash(idx);
-    return `Order done: ${action.qty}× ${p.name} = $${(action.qty * p.price).toFixed(2)}. Remaining: ${p.stock} units.`;
+    const json = await callSheets("processOrder", {
+      name,
+      qty: action.qty,
+    });
+
+    if (!json.success) return `Order failed: ${json.error}`;
+
+    syncProductsFrom(json.data);
+    const idx = products.findIndex(
+      (p) => p.name.toLowerCase() === name.toLowerCase(),
+    );
+    if (idx >= 0) flash(idx);
+    return `Order done: ${action.qty}× ${json.data.name}. Remaining: ${json.data.newStock} units.`;
   }
 
   if (action.type === "LIST_PRODUCTS") {
+    const json = await callSheets("getAll", {});
+
+    if (!json.success) return `Couldn't load inventory: ${json.error}`;
+
+    products = json.data;
+    renderTable();
+
     if (!products.length) return "Inventory is empty.";
     return products
       .map((p) => `${p.name} ($${p.price.toFixed(2)}, ${p.stock} units)`)
@@ -220,7 +257,7 @@ async function sendMsg() {
       try {
         const action = JSON.parse(match[1]);
         tag = action.type.replace(/_/g, " ");
-        const result = runAction(action);
+        const result = await runAction(action);
         if (!display) display = result;
       } catch (_) {}
     }
@@ -251,4 +288,15 @@ themeBtn.addEventListener("click", () => {
   themeIcon.className = isDark ? "ri-sun-line" : "ri-moon-line";
 });
 
-renderTable();
+// Load real inventory from the Sheet on page load
+(async function init() {
+  try {
+    const json = await callSheets("getAll", {});
+    if (json.success) {
+      products = json.data;
+    }
+  } catch (_) {
+    // Sheet unreachable on load — table just starts empty, no crash
+  }
+  renderTable();
+})();
