@@ -118,7 +118,7 @@ async function runAction(action) {
       (p) => p.name.toLowerCase() === name.toLowerCase(),
     );
     if (idx >= 0) flash(idx);
-    return `Added ${name} — $${action.price}, ${action.stock} units.`;
+    return `${name} updated — now ${json.data.stock} units in stock at $${json.data.price.toFixed(2)}.`;
   }
 
   if (action.type === "CHECK_STOCK") {
@@ -297,6 +297,26 @@ themeBtn.addEventListener("click", () => {
   html.setAttribute("data-theme", isDark ? "light" : "dark");
   themeIcon.className = isDark ? "ri-sun-line" : "ri-moon-line";
 });
+
+// mobile sidebar toggle
+const sidebar = document.getElementById("sidebar");
+const sidebarToggle = document.getElementById("sidebar-toggle");
+const sidebarClose = document.getElementById("sidebar-close");
+const sidebarBackdrop = document.getElementById("sidebar-backdrop");
+
+function openSidebar() {
+  sidebar.classList.add("open");
+  sidebarBackdrop.classList.add("open");
+}
+
+function closeSidebar() {
+  sidebar.classList.remove("open");
+  sidebarBackdrop.classList.remove("open");
+}
+
+sidebarToggle.addEventListener("click", openSidebar);
+sidebarClose.addEventListener("click", closeSidebar);
+sidebarBackdrop.addEventListener("click", closeSidebar);
 
 // Load real inventory from the Sheet on page load
 (async function init() {
