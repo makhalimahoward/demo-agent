@@ -1,4 +1,4 @@
-const WORKER_URL = "YOUR_WORKER_URL_HERE";
+const WORKER_URL = "https://wild-thunder-9def.hmakhalima4.workers.dev";
 
 let products = [];
 let history = [];
