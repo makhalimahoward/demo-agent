@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ShopAgent — AI Inventory</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+</head>
+
+<body>
+
+    <div class="app">
+
+        <!-- LEFT: CHAT SIDE -->
+        <div class="chat-side">
+
+            <div class="topnav">
+                <div class="logo"><i class="ri-store-2-line"></i></div>
+                <div>
+                    <h1>ShopAgent</h1>
+                    <p>AI-Powered Inventory Demo</p>
+                </div>
+                <div class="nav-right">
+                    <div class="status-dot"><span></span> Live</div>
+                    <button class="theme-btn" id="theme-btn" title="Toggle theme">
+                        <i class="ri-moon-line" id="theme-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="chat-wrap" id="chat">
+                <div class="chat-inner" id="chat-inner">
+                    <div class="msg">
+                        <div class="avatar howie"><i class="ri-robot-line" style="font-size:14px"></i></div>
+                        <div class="bubble howie-bubble">
+                            Hey! I'm Howie, your AI inventory assistant. I can <strong>add products</strong>,
+                            <strong>check stock
+                                levels</strong>, and <strong>process orders</strong> — all in real time. Watch the
+                            sidebar update as I
+                            act. What do you need?
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="suggestions" id="suggestions">
+                <button class="sug-btn" onclick="useSuggestion(this)">Add Nike Air Max, $120, 50 units</button>
+                <button class="sug-btn" onclick="useSuggestion(this)">Add Adidas Samba, $90, 30 units</button>
+                <button class="sug-btn" onclick="useSuggestion(this)">Check stock for Nike Air Max</button>
+                <button class="sug-btn" onclick="useSuggestion(this)">Process order for 5 Nike Air Max</button>
+                <button class="sug-btn" onclick="useSuggestion(this)">What's in stock?</button>
+            </div>
+
+            <div class="input-bar">
+                <div class="input-inner">
+                    <input type="text" id="msg-input" placeholder="Ask Howie anything..." />
+                    <button class="send-btn" id="send-btn" onclick="sendMsg()">
+                        <i class="ri-send-plane-fill"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT: INVENTORY SIDEBAR -->
+        <div class="sidebar">
+
+            <div class="sidebar-header">
+                <i class="ri-archive-line"></i>
+                Live Inventory
+                <div class="count-pill" id="product-count">0 items</div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="label">Products</div>
+                    <div class="value accent" id="stat-products">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Total Units</div>
+                    <div class="value" id="stat-units">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Stock Value</div>
+                    <div class="value" id="stat-value">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">Low / Out</div>
+                    <div class="value" id="stat-low">0</div>
+                </div>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inventory-body"></tbody>
+                </table>
+                <div class="empty-state" id="empty-state">
+                    <i class="ri-inbox-line"></i>
+                    No products yet.<br />Ask Howie to add some.
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="assets/js/main.js"></script>
+
+
+</body>
+
+</html>
+</body>
+
+</html>
