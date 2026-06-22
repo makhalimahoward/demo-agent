@@ -1,5 +1,5 @@
 const WORKER_URL = "https://wild-thunder-9def.hmakhalima4.workers.dev";
-const SHEETS_URL = "https://script.google.com/macros/s/AKfycbxidhepyq5HZJ2FteShrqA4RD0Ds3QMft87A2I69ruc6B31OJq36GNzckV6MCTPajLR8w/exec";
+const SHEETS_URL = "https://wild-thunder-9def.hmakhalima4.workers.dev/sheets";
 
 let products = [];
 let history = [];
