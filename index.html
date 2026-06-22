@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ShopAgent — AI Inventory</title>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="assets/css/style.css" />
 
@@ -20,12 +20,19 @@
         <div class="chat-side">
 
             <div class="topnav">
+                <button class="sidebar-toggle" id="sidebar-toggle" title="Toggle inventory">
+                    <i class="ri-archive-line"></i>
+                </button>
                 <div class="logo"><i class="ri-store-2-line"></i></div>
-                <div>
+                <div class="title-block">
                     <h1>ShopAgent</h1>
                     <p>AI-Powered Inventory Demo</p>
                 </div>
                 <div class="nav-right">
+                    <a class="sheet-link" href="https://docs.google.com/spreadsheets/d/1Ao0l6WgkqB-IOPwFcgu77Gl4Z5DaNKfDEB3jVWYVgf0/edit" target="_blank" rel="noopener" title="View the live backend sheet">
+                        <i class="ri-table-line"></i>
+                        <span>View backend</span>
+                    </a>
                     <div class="status-dot"><span></span> Live</div>
                     <button class="theme-btn" id="theme-btn" title="Toggle theme">
                         <i class="ri-moon-line" id="theme-icon"></i>
@@ -41,7 +48,7 @@
                             Hey! I'm Howie, your AI inventory assistant. I can <strong>add products</strong>,
                             <strong>check stock
                                 levels</strong>, and <strong>process orders</strong> — all in real time. Watch the
-                            sidebar update as I
+                            inventory panel update as I
                             act. What do you need?
                         </div>
                     </div>
@@ -63,17 +70,26 @@
                         <i class="ri-send-plane-fill"></i>
                     </button>
                 </div>
+                <div class="footer-credit">
+                    Built by <a href="https://howardmakhalima.pages.dev" target="_blank" rel="noopener">Howard Makhalima</a>
+                </div>
             </div>
 
         </div>
 
+        <!-- backdrop for mobile sidebar overlay -->
+        <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
         <!-- RIGHT: INVENTORY SIDEBAR -->
-        <div class="sidebar">
+        <div class="sidebar" id="sidebar">
 
             <div class="sidebar-header">
                 <i class="ri-archive-line"></i>
                 Live Inventory
                 <div class="count-pill" id="product-count">0 items</div>
+                <button class="sidebar-close" id="sidebar-close" title="Close">
+                    <i class="ri-close-line"></i>
+                </button>
             </div>
 
             <div class="stats-row">
@@ -113,6 +129,11 @@
                 </div>
             </div>
 
+            <a class="sheet-link sheet-link--block" href="https://docs.google.com/spreadsheets/d/1Ao0l6WgkqB-IOPwFcgu77Gl4Z5DaNKfDEB3jVWYVgf0/edit" target="_blank" rel="noopener">
+                <i class="ri-external-link-line"></i>
+                Open the Google Sheet backend
+            </a>
+
         </div>
 
     </div>
@@ -120,9 +141,6 @@
     <script src="assets/js/main.js"></script>
 
 
-</body>
-
-</html>
 </body>
 
 </html>
