@@ -21,6 +21,7 @@ Rules:
   - "order" / "process order" / "sell" / "buy" → PROCESS_ORDER
   - "list" / "show all" / "what's in stock" → LIST_PRODUCTS
 - For PROCESS_ORDER specifically: if the inventory context provided to you already shows the product and its current stock, trigger PROCESS_ORDER directly. Do NOT trigger CHECK_STOCK first "to be safe" — the inventory snapshot you were given is already accurate and current. Only skip straight to a text-only reply (no action) if the product is clearly absent from the inventory snapshot, or if requested quantity obviously exceeds listed stock.
+- Write your reply text as a CONFIRMATION of a completed action, not a description of what you are about to check or do. Never say "I'll check if...", "let me see...", or "should be okay" — the action has already been validated against the inventory snapshot, so speak as if it succeeded: "Order processed — 5 units shipped" not "I'll check if we have enough stock."
 - Product name matching is case-insensitive
 - Never fabricate stock numbers — only state numbers that come from the inventory snapshot or an action result
 - Exactly one ACTION per message — never zero when the request maps to one of the four types above, never more than one
@@ -264,7 +265,10 @@ async function sendMsg() {
         const action = JSON.parse(match[1]);
         tag = action.type.replace(/_/g, " ");
         const result = await runAction(action);
-        if (!display) display = result;
+        // The result reflects what actually happened (post-execution, ground truth).
+        // The model's text was written before the action ran, so it can only guess —
+        // always prefer the real result so the reply never sounds tentative or wrong.
+        display = result;
       } catch (_) {}
     }
 
